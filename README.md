@@ -77,3 +77,8 @@ Issue: The ingestion pipeline initially failed with a ValueError: Expected Embed
     **Security Best Practice**: Moved sensitive paths and model configurations out of the source code and into environment variables to ensure the project remains production-ready and secure.
 
 ---
+
+### 🚀 Future Roadmap & Scaling
+* **Hardware Acceleration**: Migrate the PyTorch embedding process to utilize **AMD ROCm** for faster vectorization on Radeon/Instinct hardware.
+* **Hybrid Search**: Implement a combination of BM25 (keyword) and Vector (semantic) search to improve retrieval accuracy for technical product names.
+* **Asynchronous Ingestion**: Transition the ingestion pipeline to a message-queue architecture (e.g., Celery/RabbitMQ) to handle streaming marketing data in real-time.
