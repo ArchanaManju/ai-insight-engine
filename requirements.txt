@@ -1,0 +1,16 @@
+# Data Handling
+pandas>=2.0.0
+numpy>=1.24.0
+
+# AI & Embeddings (The PyTorch core)
+sentence-transformers>=2.2.2
+torch>=2.0.0
+
+# Vector Database
+chromadb>=0.4.0
+
+# LLM Orchestration
+langchain>=0.1.0
+
+# Utilities
+python-dotenv  # To handle API keys or local paths securely
