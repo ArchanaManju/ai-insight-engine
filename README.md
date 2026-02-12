@@ -63,10 +63,11 @@ Issue: The ingestion pipeline initially failed with a ValueError: Expected Embed
 * **Solution**:
     **Targeted Sanitization**: Refactored the cleaning logic to use df.dropna(subset=['reviews.text']), ensuring rows were only discarded if the primary data source was missing.
     **Pre-Encoding Validation**: Implemented a "Senior-level" defensive check:
-    **Python**
+    ```bash
         if df.empty:
             print("Error: No data found after cleaning. Aborting to save compute.")
             return
+    ```
     **Type Casting**: Added .astype(str) conversion to guarantee the PyTorch model received a consistent input format, preventing silent failures during the embedding process.
 
 1. **Challenge 2** Environment Portability and Path Management
