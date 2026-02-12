@@ -1,4 +1,4 @@
-## 🚀 How to Run the AMD AI Insight Engine
+## 🚀 How to Run the AI Insight Engine
 
 ### 1. Prerequisites
 * **Python 3.9+**
