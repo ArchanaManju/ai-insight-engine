@@ -31,7 +31,9 @@ python src/ingest.py
 # Step 2: Query the engine for insights
 python src/query.py
 
+```
 ---
+
 ### 🏗️ System Architecture
 
 This project implements a **Retrieval-Augmented Generation (RAG)** architecture, decoupled into two primary stages to ensure high-performance data handling and reliable AI inference.
@@ -51,24 +53,26 @@ This project implements a **Retrieval-Augmented Generation (RAG)** architecture,
 
 ### 🛠️ Technical Challenges & Solutions
 
-Challenge 1: Empty Embedding Vectors during Ingestion
+1. **Challenge 1** Empty Embedding Vectors during Ingestion
 Issue: The ingestion pipeline initially failed with a ValueError: Expected Embeddings to be non-empty, caused by an empty list being passed to ChromaDB.
 
-Root Cause Analysis:
-Aggressive Cleaning: Using a global .dropna() on the entire DataFrame removed rows that had missing metadata (like "User Location"), even if the critical "Review Text" was present.
-Data Sparsity: Some rows contained headers but no actual text content, resulting in empty strings that the model could not vectorize.
+* **Root Cause Analysis**:
+    **Aggressive Cleaning**: Using a global .dropna() on the entire DataFrame removed rows that had missing metadata (like "User Location"), even if the critical "Review Text" was present.
+    **Data Sparsity**: Some rows contained headers but no actual text content, resulting in empty strings that the model could not vectorize.
 
-Solution:
-Targeted Sanitization: Refactored the cleaning logic to use df.dropna(subset=['reviews.text']), ensuring rows were only discarded if the primary data source was missing.
-Pre-Encoding Validation: Implemented a "Senior-level" defensive check:
-Python
-if df.empty:
-    print("Error: No data found after cleaning. Aborting to save compute.")
-    return
-Type Casting: Added .astype(str) conversion to guarantee the PyTorch model received a consistent input format, preventing silent failures during the embedding process.
+* **Solution**:
+    **Targeted Sanitization**: Refactored the cleaning logic to use df.dropna(subset=['reviews.text']), ensuring rows were only discarded if the primary data source was missing.
+    **Pre-Encoding Validation**: Implemented a "Senior-level" defensive check:
+    **Python**
+        if df.empty:
+            print("Error: No data found after cleaning. Aborting to save compute.")
+            return
+    **Type Casting**: Added .astype(str) conversion to guarantee the PyTorch model received a consistent input format, preventing silent failures during the embedding process.
 
-Challenge 2: Environment Portability and Path Management
-Issue: Scripts failed to locate the .env file or the chroma_db directory when executed from different subdirectories.
-Solution:
-Dynamic Path Discovery: Integrated python-dotenv with find_dotenv(). This allows the application to dynamically locate the root configuration file regardless of the execution context.
-Security Best Practice: Moved sensitive paths and model configurations out of the source code and into environment variables to ensure the project remains production-ready and secure.
+1. **Challenge 2** Environment Portability and Path Management
+    **Issue**: Scripts failed to locate the .env file or the chroma_db directory when executed from different subdirectories.
+* **Solution**:
+    **Dynamic Path Discovery**: Integrated python-dotenv with find_dotenv(). This allows the application to dynamically locate the root configuration file regardless of the execution context.
+    **Security Best Practice**: Moved sensitive paths and model configurations out of the source code and into environment variables to ensure the project remains production-ready and secure.
+
+---
