@@ -32,9 +32,8 @@ python src/ingest.py
 python src/query.py
 
 
-🏗️ System Architecture 
+### 🏗️ System Architecture 
 This project implements a Retrieval-Augmented Generation (RAG) architecture, decoupled into two primary stages to ensure high-performance data handling and reliable AI inference.
-
 
 1. Ingestion Phase (ingest.py)The ingestion pipeline handles the ETL (Extract, Transform, Load) process for unstructured marketing data:
     Data Extraction: Loads raw customer feedback from marketing_data.csv using Pandas.
@@ -46,7 +45,8 @@ This project implements a Retrieval-Augmented Generation (RAG) architecture, dec
     ContextAugmentation: The top $N$ most relevant insights are retrieved and injected into a structured prompt.
     LocalLLMGeneration: A localized instance of Llama 3 (via Ollama) synthesizes the retrieved context into a coherent, professional marketing report.
 
-🛠️ Technical Challenges & Solutions
+### 🛠️ Technical Challenges & Solutions
+
 Challenge 1: Empty Embedding Vectors during Ingestion
 Issue: The ingestion pipeline initially failed with a ValueError: Expected Embeddings to be non-empty, caused by an empty list being passed to ChromaDB.
 
@@ -57,7 +57,6 @@ Data Sparsity: Some rows contained headers but no actual text content, resulting
 Solution:
 Targeted Sanitization: Refactored the cleaning logic to use df.dropna(subset=['reviews.text']), ensuring rows were only discarded if the primary data source was missing.
 Pre-Encoding Validation: Implemented a "Senior-level" defensive check:
-
 Python
 if df.empty:
     print("Error: No data found after cleaning. Aborting to save compute.")
@@ -66,9 +65,6 @@ Type Casting: Added .astype(str) conversion to guarantee the PyTorch model recei
 
 Challenge 2: Environment Portability and Path Management
 Issue: Scripts failed to locate the .env file or the chroma_db directory when executed from different subdirectories.
-
 Solution:
-
 Dynamic Path Discovery: Integrated python-dotenv with find_dotenv(). This allows the application to dynamically locate the root configuration file regardless of the execution context.
-
 Security Best Practice: Moved sensitive paths and model configurations out of the source code and into environment variables to ensure the project remains production-ready and secure.
